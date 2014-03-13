@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>My first Three.js app</title>
+		<style>canvas { width: 100%; height: 100% }</style>
+	</head>
+	<body>
+		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
+		<script src="https://rawgithub.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+	
+		<script>
+			//set up scene and camera
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+			camera.position.z = 20;
+			var controls = new THREE.OrbitControls(camera);
+			controls.addEventListener('change', render);
+
+
+			//axis set up for help
+			var axisHelper = new THREE.AxisHelper( 100 );
+			scene.add( axisHelper );
+
+			//set up renderer
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+
+
+			// New Code Below This line ------
+			var width = 2;
+			var row = 4;
+			var colors = [ 0x0000ff, 0xff0000, 0x00ff00, 0xff00ff, 0x00ffff, 0xffff00];
+			/*
+				0 - right
+				1 - left
+				2 - top
+				3 - bottom
+				4 - front
+				5 - back
+			*/
+			var materials = [];
+			for(var i = 0; i < 6; i++) {
+				materials.push(new THREE.MeshBasicMaterial({ color: colors[i], wireframe: true}));
+			}
+			var geometry = new THREE.CubeGeometry(width,width,width);
+			var skin = new THREE.MeshFaceMaterial(materials);
+			var formCube = new Array(row);
+			for(var i = 0; i < row; i++) {
+				formCube[i] = new Array(row);
+				for(var j = 0; j < row; j++) {
+					formCube[i][j] = new Array(row);
+				}
+			}
+
+			var rubik = formCube;
+
+			for(var x = 0; x < row; x++) {
+				for(var y = 0; y < row; y++) {
+					for(var z = 0; z < row; z++) {
+						rubik[x][y][z] = new THREE.Mesh(geometry, skin);
+						scene.add(rubik[x][y][z]);
+						rubik[x][y][z].position.x = (x - (row / 2)) * width + (width / 2);
+						rubik[x][y][z].position.y = (y - (row / 2)) * width + (width / 2);;
+						rubik[x][y][z].position.z = (z - (row / 2)) * width + (width / 2);;
+					}
+				}
+			}
+			// var cube = new THREE.Mesh(geometry, skin);
+			
+
+			
+
+
+			var render = function () {
+				requestAnimationFrame(render);
+				renderer.render(scene, camera);
+			};
+
+			render();
+		</script>
+	</body>
+</html>
