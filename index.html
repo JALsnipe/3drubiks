@@ -21,6 +21,14 @@
 			var axisHelper = new THREE.AxisHelper( 100 );
 			scene.add( axisHelper );
 
+			// parent
+			parent = new THREE.Object3D();
+    		scene.add( parent );
+
+    		// parent
+			parent2 = new THREE.Object3D();
+    		scene.add( parent2 );
+
 			//set up renderer
 			var renderer = new THREE.WebGLRenderer();
 			renderer.setSize(window.innerWidth, window.innerHeight);
@@ -30,6 +38,8 @@
 			// New Code Below This line ------
 			var width = 2;
 			var row = 4;
+
+
 			var colors = [ 0x0000ff, 0xff0000, 0x00ff00, 0xff00ff, 0x00ffff, 0xffff00];
 			/*
 				0 - right
@@ -59,13 +69,17 @@
 				for(var y = 0; y < row; y++) {
 					for(var z = 0; z < row; z++) {
 						rubik[x][y][z] = new THREE.Mesh(geometry, skin);
-						scene.add(rubik[x][y][z]);
+						// scene.add(rubik[x][y][z]);
 						rubik[x][y][z].position.x = (x - (row / 2)) * width + (width / 2);
-						rubik[x][y][z].position.y = (y - (row / 2)) * width + (width / 2);;
-						rubik[x][y][z].position.z = (z - (row / 2)) * width + (width / 2);;
+						rubik[x][y][z].position.y = (y - (row / 2)) * width + (width / 2);
+						rubik[x][y][z].position.z = (z - (row / 2)) * width + (width / 2);
+						parent.add(rubik[x][y][z]);
+						parent2.add(rubik[x][y][z]);
 					}
+
 				}
 			}
+
 			// var cube = new THREE.Mesh(geometry, skin);
 			
 
@@ -74,6 +88,8 @@
 
 			var render = function () {
 				requestAnimationFrame(render);
+
+				parent2.rotation.y += 0.005;
 				renderer.render(scene, camera);
 			};
 
