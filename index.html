@@ -21,24 +21,48 @@
 			var axisHelper = new THREE.AxisHelper( 100 );
 			scene.add( axisHelper );
 
-			// parent
-			parent = new THREE.Object3D();
-    		scene.add( parent );
-
-    		// parent
-			parent2 = new THREE.Object3D();
-    		scene.add( parent2 );
-
 			//set up renderer
 			var renderer = new THREE.WebGLRenderer();
 			renderer.setSize(window.innerWidth, window.innerHeight);
 			document.body.appendChild(renderer.domElement);
 
-
 			// New Code Below This line ------
 			var width = 2;
 			var row = 4;
 
+			// parent
+			gyro = new THREE.Object3D();
+    		scene.add( gyro );
+
+    		//children
+    		var vertical = new THREE.Object3D();
+    		var horizontal = new THREE.Object3D();
+    		var clock = new THREE.Object3D();
+    		gyro.add(vertical);
+    		gyro.add(horizontal);
+    		gyro.add(clock);
+
+    		// turn vertical
+    		var turnVertical = [];
+    		for(var vert = 0; vert < row; vert++) {
+    			turnVertical[vert] = new THREE.Object3D();
+    			vertical.add(turnVertical[vert]);
+    		}
+
+    		// turn horizontal
+    		var turnHorizontal = [];
+    		for(var hori = 0; hori < row; hori++) {
+    			turnHorizontal[hori] = new THREE.Object3D();
+    			horizontal.add(turnHorizontal[hori]);
+    		}
+
+
+    		// turn clock
+    		var turnClock = [];
+    		for(var cl = 0; cl < row; cl++) {
+    			turnClock[cl] = new THREE.Object3D();
+    			clock.add(turnClock[cl]);
+    		}
 
 			var colors = [ 0x0000ff, 0xff0000, 0x00ff00, 0xff00ff, 0x00ffff, 0xffff00];
 			/*
@@ -73,10 +97,10 @@
 						rubik[x][y][z].position.x = (x - (row / 2)) * width + (width / 2);
 						rubik[x][y][z].position.y = (y - (row / 2)) * width + (width / 2);
 						rubik[x][y][z].position.z = (z - (row / 2)) * width + (width / 2);
-						parent.add(rubik[x][y][z]);
-						parent2.add(rubik[x][y][z]);
+						turnVertical[x].add(rubik[x][y][z]);
+						turnHorizontal[y].add(rubik[x][y][z]);
+						turnClock[z].add(rubik[x][y][z]);
 					}
-
 				}
 			}
 
@@ -89,7 +113,7 @@
 			var render = function () {
 				requestAnimationFrame(render);
 
-				parent2.rotation.y += 0.005;
+				turnClock[0].rotation.z += 0.005;
 				renderer.render(scene, camera);
 			};
 
